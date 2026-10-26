@@ -1,0 +1,8 @@
+{
+  "name": "tongzhuo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.13" },
+  "scripts": { "start": "node server.mjs", "up": "node scripts/start.mjs", "share": "node scripts/start.mjs --share", "build": "node scripts/build.mjs", "test": "node --test test/*.test.mjs", "check": "node --check server.mjs && node --check cloud-runtime.mjs && node --check public/app.js && node --check scripts/start.mjs" }
+}

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f3f6f8"><title>同桌 · 把任务放到一张桌上</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
+<body>
+<div id="app">
+  <aside class="rail">
+    <a class="brand" href="/" aria-label="同桌首页"><span class="brand-mark" aria-hidden="true">同</span><span>同桌<small>共同讨论，一起推进</small></span></a>
+    <div class="rail-label">任务房间<button id="new-room" class="icon-button" aria-label="创建任务房间">＋</button></div>
+    <nav id="room-list" aria-label="房间列表"></nav>
+    <div class="rail-bottom"><span id="service-status" class="service-status">正在检查群聊服务</span><button class="quiet" id="settings-button">连接设置</button><span class="build-label">私人协作试点 · MVP 0.1</span></div>
+  </aside>
+  <main id="main">
+    <section id="welcome" class="welcome">
+      <div class="eyebrow">人与人，与一个云端 Agent</div><h1>把任务放到<br>一张桌上。</h1><p>邀请同事一起讨论，让每个人的观点进入同一段上下文。需要分析时，再请 Agent 加入。</p>
+      <button class="primary" id="welcome-create">创建任务房间 <span aria-hidden="true">↗</span></button>
+      <div class="welcome-note"><span>讨论由大家推进</span><span>执行由房主控制</span><span>文件在房间里共享</span></div>
+      <div id="welcome-status" class="notice" hidden></div>
+    </section>
+    <section id="room-view" class="room-view" hidden>
+      <header class="room-header"><div><div class="eyebrow" id="room-eyebrow">任务协作间</div><h1 id="room-title"></h1></div><div class="header-actions"><span class="connection-pill" id="cloud-status">云端未连接</span><button id="invite-button" class="secondary">邀请同事</button></div></header>
+      <div class="room-body">
+        <section class="conversation" aria-label="共享讨论">
+          <div class="conversation-heading"><strong>一起讨论</strong><span id="read-through">Agent 尚未处理消息</span><button id="export-button" class="quiet">导出讨论</button></div>
+          <section id="agent-status-panel" class="agent-status-panel" data-tone="warning" role="status" aria-label="Agent 连接状态"><div><strong id="agent-status-title">正在检查 Agent 连接</strong><p id="agent-status-detail"></p></div><button id="agent-status-action" class="secondary" type="button" hidden>查看连接步骤</button></section>
+          <div id="messages" class="messages" aria-live="polite" aria-relevant="additions"></div>
+          <div id="empty-chat" class="empty-chat"><span aria-hidden="true">↗</span><h2>从一个问题开始</h2><p>大家可以自由讨论、上传资料。<br>点击 @Agent 提出请求，由房主决定何时执行。</p></div>
+          <form id="compose" class="compose"><div id="reply-strip" class="reply-strip" hidden><span id="reply-label"></span><button type="button" id="cancel-reply" class="quiet">取消</button></div><div id="mention-strip" class="mention-strip" hidden><span>@Agent</span><span id="mention-help">请求分析</span><button id="cancel-mention" type="button" class="quiet">移除</button></div><label for="message-input" class="sr-only">群聊消息</label><textarea id="message-input" rows="3" maxlength="10000" placeholder="输入消息；以 @Agent 开头或点击下方按钮请求分析…" required></textarea><div class="compose-actions"><button type="button" id="mention-button" class="chip" aria-pressed="false">@Agent</button><button type="button" id="attach-button" class="chip">＋ 上传文件</button><span id="selected-files" class="muted"></span><span class="spacer"></span><small id="identity-label"></small><button type="submit" class="primary" id="send-button">发送</button></div></form>
+          <div id="chat-status" class="chat-status" aria-live="polite">消息同步中</div>
+        </section>
+        <aside class="context">
+          <section><div class="section-title">这次要完成什么</div><p id="room-goal" class="goal"></p></section>
+          <section id="agent-panel"><div class="section-title">云端 Agent <button id="connect-button" class="quiet">启动 Agent</button></div><p id="environment-label" class="muted"></p><button id="cloud-config-button" class="quiet">选择已有环境</button><p id="agent-description" class="small"></p><ol id="agent-setup-steps" class="agent-setup-steps"><li id="connection-step-1">查询并复用已有环境</li><li id="connection-step-2">在本页启动 Agent</li><li id="connection-step-3">等待 Agent 接入确认</li></ol><p id="agent-connection-meta" class="connection-meta"></p><a id="cloud-task-link" class="external-link" target="_blank" rel="noopener noreferrer" hidden>打开云任务</a><button id="disconnect-button" class="danger-text" hidden>撤销连接</button></section>
+          <section><div class="section-title">请求队列 <span id="job-count" class="muted"></span></div><div id="jobs"></div></section>
+          <section><div class="section-title">共享文件 <button id="upload-button" class="quiet">上传</button></div><p class="section-hint">勾选本轮需要的文件。上传不会唤起 Agent。</p><div id="files"></div></section>
+          <section><div class="section-title">在这张桌旁 <button id="identity-button" class="quiet">我的身份</button></div><div id="members"></div></section>
+        </aside>
+      </div>
+    </section>
+  </main>
+</div>
+<input id="file-input" type="file" hidden multiple>
+<dialog id="modal"><form id="modal-form"><div class="modal-header"><h2 id="modal-title"></h2><button type="button" id="modal-close" class="icon-button" aria-label="关闭">×</button></div><div id="modal-content"></div><div id="modal-error" class="form-error" role="alert" hidden></div><div class="modal-actions"><button type="button" id="modal-cancel" class="secondary">取消</button><button type="submit" id="modal-submit" class="primary">确定</button></div></form></dialog>
+<div id="toast" class="toast" role="status" hidden></div>
+</body></html>
