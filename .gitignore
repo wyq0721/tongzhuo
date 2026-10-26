@@ -1,0 +1,22 @@
+.local/
+node_modules/
+.sites-runtime/
+dist/
+*.tar.gz
+test-results/
+.env*
+!.env.example
+
+# Runtime output and machine-local configuration
+.openai/
+__pycache__/
+*.py[cod]
+*.log
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+*.secret
+*.pem
+*.key
+.DS_Store
